@@ -1,6 +1,5 @@
 <head>
   <title>editmunk</title>
-  <script src="" type="text/javascript"></script>
 </head>
 
 <body>
@@ -27,13 +26,15 @@
     </div>
   </div>
 
-  <div id="editor">
-    function() {
-      return true;
-    }
-  </div>
+  {{> main}}
 </body>
 
-<template name="hello">
-
+<template name="main">
+  {{#if loggedIn}}
+    <div id="editor">
+      Type something..
+    </div>
+  {{else}}
+    <h1>Please log in man!</h1>
+  {{/if}}
 </template>

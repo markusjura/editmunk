@@ -11,8 +11,6 @@ if (Meteor.isClient) {
     return "Welcome to editmunk!";
   };
 
-
-
   Template.hello.events({
     'click input' : function () {
       // template data, if any, is available in 'this'
