@@ -45,7 +45,7 @@ function render_editor() {
 }
 
 // fetching the inital app list
-Meteor.call('fetchAppsForUser', function(error, apps) {
+function fetchAppList(error, apps) {
   if(error) {
     console.log(error);
     return;
@@ -65,7 +65,9 @@ Meteor.call('fetchAppsForUser', function(error, apps) {
       var sidebar = Template.sidebar.initSidebar({});
     }
   }
-});
+}
+
+Meteor.call('fetchAppsForUser', fetchAppList);
 
 Meteor.startup(function () {
   var fragment = Meteor.render(
@@ -87,25 +89,27 @@ Template.main.loggedIn = function () {
 
 Template.app.isActive = function() {
   return (this.toString() == Session.get("activeAppId")) ? "active" : "";
-}
+};
 
 Template.app.getName = function() {
   return App.fetchNameForId(this.toString());
-}
+};
 
 Template.appList.events({
   'click .add-app' : function(evt, templ) {
     evt.stopPropagation();
     evt.preventDefault();
+    var modal = $('#take-name').modal();
 
-    $('#take-name').modal();
-    $('#take-name').find('#save-button').click(function() {
-      $('#take-name').modal('hide');
-      var name = $("#take-name").find('input').val();
+    $(modal).find('#save-button').click(function() {
+      var name = $(modal).find('#add-input').val();
+      $(modal).modal('hide');
       var app = App.insert(name);
       Meteor.call('addAppToUser', app._id);
-      $("#take-name").find('input').val('');
+      $(modal).find('input').val('');
+      Meteor.call('fetchAppsForUser', fetchAppList);
     });
+
   },
 
   'click .appName' : function(evt, tmpl) {
@@ -114,3 +118,7 @@ Template.appList.events({
   }
 
 });
+
+Template.modal.modName = 'take-name';
+Template.modal.modValue = 'add-input';
+Template.modal.saveTrigger = 'save-button';

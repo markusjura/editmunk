@@ -7,6 +7,7 @@ Apps = new Meteor.Collection('app');
 
 App = {
   insert: function(name) {
+    Session.set("activeApp", name);
     var id = Apps.insert({
       created_at: new Date().getTime(),
       name: name

@@ -28,6 +28,8 @@
 </div>
 
   {{>main}}
+
+  {{>modal}}
 </body>
 
 <template name="modal">
@@ -38,7 +40,7 @@
     </div>
     <div class="modal-footer">
       <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-      <button class="btn btn-primary" id="{{saveTrigger}}">Save</button>
+      <button class="btn btn-primary action" id="{{saveTrigger}}">Save</button>
     </div>
   </div>
 
