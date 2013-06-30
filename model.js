@@ -5,6 +5,17 @@
  */
 Apps = new Meteor.Collection('app');
 
+App = {
+  insert: function(name) {
+    var id = Apps.insert({
+      created_at: new Date().getTime(),
+      name: name
+    });
+
+    return Apps.findOne({_id: id});
+  }
+}
+
 /**
  * _id
  * created_at
