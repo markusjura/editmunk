@@ -1,24 +1,30 @@
 // fetch the initial document list
-Deps.autorun(function(c) {
-  var activeAppId = Session.get("activeAppId");
 
-  if (typeof activeAppId == 'undefined')
-    return;
+Meteor.startup(function() {
+  Deps.autorun(function(c) {
+    var activeAppId = Session.get("activeAppId");
+    console.log('x: ', activeAppId);
+    if (typeof activeAppId == "undefined" || activeAppId === null) {
+      console.log("in if");
+      return;
+    }
 
-  var documents = Document.fetchAllForAppId(activeAppId);
 
-  if(typeof Session.get("activeDocumentId") == 'undefined') {
-    Session.set("activeDocumentId", Document.fetchLastForAppId(activeAppId));
-  }
+    var documents = Document.fetchAllForAppId(activeAppId);
 
-  if(documents && documents.length > 0) {
-    var rendered = Meteor.render(function() {
-      return Template.documentList({ documents: documents });
-    });
+    if(typeof Session.get("activeDocumentId") == 'undefined') {
+      Session.set("activeDocumentId", Document.fetchLastForAppId(activeAppId));
+    }
 
-    document.getElementById("document-list").innerHTML = '';
-    document.getElementById("document-list").appendChild(rendered);
-  }
+    if(documents && documents.length > 0) {
+      var rendered = Meteor.render(function() {
+        return Template.documentList({ documents: documents });
+      });
+
+      document.getElementById("document-list").innerHTML = '';
+      document.getElementById("document-list").appendChild(rendered);
+    }
+  });
 });
 
 Template.document.isActive = function() {
