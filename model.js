@@ -15,3 +15,19 @@ Apps = new Meteor.Collection('app');
  * content
  */
 Documents = new Meteor.Collection('document');
+
+Document = {
+  insert: function(document) {
+    document._id = Documents.insert(document);
+    return document;
+  },
+
+  fetchLastForAppId: function(appId) {
+    return Documents.find({appId: appId}, {sort: {updated_at: -1}, limit: 1}).fetch()[0];
+  },
+
+  update: function(_id, propertiesToUpdate) {
+    Documents.update({ _id: _id }, { $set : propertiesToUpdate });
+  }
+
+}

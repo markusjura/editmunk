@@ -1,13 +1,14 @@
 function render_editor() {
   if($('#editor').length > 0) {
-    var lastDocument = Documents.find({}, {sort: {updated_at: -1}, limit: 1}).fetch()[0];
+    var lastDocument = Document.fetchLastForAppId('default');
 
     // if no document exist => create one
-    if(lastDocument.length == 0) {
+    if(typeof lastDocument == 'undefined') {
       var newDate = new Date().getTime();
-      lastDocument = Documents.insert({
+      lastDocument = Document.insert({
         created_at: newDate,
         updated_at: newDate,
+        appId: "default",
         type: "feature",
         name: "first.feature",
         content: "Given I am on the Welcome screen"
@@ -17,34 +18,26 @@ function render_editor() {
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/xcode");
     editor.getSession().setMode("ace/mode/javascript");
-
     editor.setValue(lastDocument.content);
     Session.set("document", lastDocument);
 
-    // var query = Documents.find({_id: lastDocument});
-    // handle = query.observe({
-    //   changed : function(newDoc, oldIndex, oldDoc) {
-    //     if(editor !== undefined)
-    //       editor.setValue(newDoc.content);
-    //   }
-    // });
-
-    console.log(Session.get("document")._id);
-    console.log(editor.getValue());
     editor.getSession().on('change', function(e) {
-    // update the Documents collection
-    Documents.update({_id: Session.get("document")._id},
-      { $set :
-        {
-          content : editor.getValue()//,
-          // updated_at : new Date().getTime()
-        }
+      // update the Documents collection
+      Document.update(Session.get("document")._id, {
+        content : editor.getValue(),
+        updated_at : new Date().getTime()
       });
-
     });
   }
 }
 
+Meteor.startup(function () {
+  $(document).ready(function (){
+    $('.add-file,.edit-file').click(function() {
+      $('#take-name').modal();
+    });
+  });
+});
 
 Template.main.loggedIn = function () {
   setTimeout(function() {
