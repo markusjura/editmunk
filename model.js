@@ -33,6 +33,10 @@ Document = {
     return document;
   },
 
+  fetchAllForAppId: function(appId) {
+    return Documents.find({ appId: appId }).fetch();
+  },
+
   fetchLastForAppId: function(appId) {
     return Documents.find({appId: appId}, {sort: {updated_at: -1}, limit: 1}).fetch()[0];
   },

@@ -33,8 +33,13 @@ function render_editor() {
 
 Meteor.startup(function () {
   $(document).ready(function (){
-    $('.add-file,.edit-file').click(function() {
+    $('.add-app,.add-file,.edit-file').click(function() {
       $('#take-name').modal();
+      $('#take-name').find('#save-button').click(function() {
+        $('#take-name').modal('hide');
+        Meteor.call('addAppToUser', $("#take-name").find('input').val());
+
+      });
     });
   });
 });
