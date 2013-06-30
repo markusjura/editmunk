@@ -1,8 +1,11 @@
 function render_editor() {
   if($('#editor').length > 0) {
     var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/xcode");
+    editor.setTheme("ace/theme/eclipse");
     editor.getSession().setMode("ace/mode/javascript");
+    editor.setHighlightActiveLine(true);
+    editor.setShowPrintMargin(true);
+
   }
 }
 
