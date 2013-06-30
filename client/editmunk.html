@@ -15,8 +15,11 @@
       <div class="nav-collapse">
         <ul class="nav">
           <li class="active"><li>{{loginButtons}}</li></li>
-          <li class="dropdown" id="appsListWrapper">
-            {{>appList}}
+          <li class="dropdown" >
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="activeApp"></span> <b class="caret"></b></a>
+            <ul class="dropdown-menu" id="apps-list">
+              {{>appList}}
+            </ul>
           </li>
         </ul>
       </div><!-- /.nav-collapse -->
@@ -25,20 +28,21 @@
 </div>
 
   {{>main}}
-
-  <!-- Modal -->
-<div id="take-name" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-body">
-    <h5 id="myModalLabel">Please enter the name:</h5>
-    <input type="text" id="modal-value" />
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-    <button class="btn btn-primary" id="save-button">Save</button>
-  </div>
-</div>
-
 </body>
+
+<template name="modal">
+  <div id="{{modName}}" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-body">
+      <h5 id="myModalLabel">Please enter the name:</h5>
+      <input type="text" id="{{modValue}}" />
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+      <button class="btn btn-primary" id="{{saveTrigger}}">Save</button>
+    </div>
+  </div>
+
+</template>
 
 <template name="main">
   {{#if loggedIn}}
@@ -69,14 +73,11 @@
 </template>
 
 <template name="appList">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="activeApp"></span> <b class="caret"></b></a>
-  <ul class="dropdown-menu" id="apps-list">
-    <li><a href="#" class="add-app">Add new</a></li>
-    <li class="divider"></li>
-      {{#each apps}}
-       <li>{{>app}}</li>
-      {{/each}}
-  </ul>
+  <li><a href="#" class="add-app">Add new</a></li>
+  <li class="divider"></li>
+  {{#each apps}}
+   <li>{{>app}}</li>
+  {{/each}}
 </template>
 
 <template name="app">

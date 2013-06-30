@@ -55,7 +55,8 @@ Meteor.call('fetchAppsForUser', function(error, apps) {
     var rendered = Meteor.render(function() {
       return Template.appList({ apps: apps });
     });
-    document.getElementById("appsListWrapper").appendChild(rendered);
+    document.getElementById("apps-list").innerHTML = '';
+    document.getElementById("apps-list").appendChild(rendered);
 
     if(typeof Session.get("activeApp") == "undefined") {
       Session.set("activeApp", App.fetchNameForId(apps[0]));
