@@ -23,7 +23,15 @@ body {
 }
 
   .sidebar-nav li a {
-    padding: 12px 8px;
+    padding: 6px 8px;
+  }
+
+  .sidebar-nav li a:hover {
+    background-color: #fff;
+  }
+
+  .sidebar-nav .active, .sidebar-nav li a.active:hover {
+    background-color: #ddd;
   }
 
 i {

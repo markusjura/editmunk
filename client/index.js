@@ -66,8 +66,6 @@ function fetchAppList(error, apps) {
         Session.get("activeApp") === null) {
       Session.set("activeApp", App.fetchNameForId(apps[0]));
       Session.set("activeAppId", apps[0]);
-
-      var sidebar = Template.sidebar.initSidebar({});
     }
   }
 }

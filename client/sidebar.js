@@ -1,7 +1,15 @@
 // fetch the initial document list
-Template.sidebar.initSidebar = (function () {
+Deps.autorun(function(c) {
   var activeAppId = Session.get("activeAppId");
+
+  if (typeof activeAppId == 'undefined')
+    return;
+
   var documents = Document.fetchAllForAppId(activeAppId);
+
+  if(typeof Session.get("activeDocumentId") == 'undefined') {
+    Session.set("activeDocumentId", Document.fetchLastForAppId(activeAppId));
+  }
 
   if(documents && documents.length > 0) {
     var rendered = Meteor.render(function() {
@@ -10,15 +18,11 @@ Template.sidebar.initSidebar = (function () {
 
     document.getElementById("document-list").innerHTML = '';
     document.getElementById("document-list").appendChild(rendered);
-
-    if(typeof Session.get("activeDocument") == "undefined") {
-      Session.set("activeDocument", Document.fetchLastForAppId(activeAppId));
-    }
   }
 });
 
 Template.document.isActive = function() {
-  return (this.toString() == Session.get("activeDocumentId")) ? "active" : "";
+  return (this._id == Session.get("activeDocumentId")) ? "active" : "";
 }
 
 Template.documentList.events({
