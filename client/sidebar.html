@@ -1,0 +1,23 @@
+<template name="sidebar">
+  <div class="sidebar-nav" style="max-width: 200px;">
+      <ul id="document-list" class="nav nav-list">
+        {{> documentList}}
+      </ul>
+    </div>
+</template>
+
+<template name="documentList">
+  <li class="nav-header">
+    <i class="icon-plus add-file" title="Add files"></i>
+  </li>
+  {{#each documents}}
+    <li>{{> document}}</li>
+  {{/each}}
+</template>
+
+<template name="document">
+  <a href="#" id="{{this._id}}" class="{{isActive}} document-name">
+    {{this.name}}
+    <i class="icon-trash pull-right"></i>
+  </a>
+</template>

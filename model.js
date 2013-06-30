@@ -16,7 +16,7 @@ App = {
   },
 
   fetchNameForId: function(_id) {
-    return Apps.findOne({ _id: _id }).name;
+    return Apps.findOne({ _id:_id }).name;
   }
 }
 
@@ -38,11 +38,11 @@ Document = {
   },
 
   fetchAllForAppId: function(appId) {
-    return Documents.find({ appId: appId }).fetch();
+    return Documents.find({ app_id: appId }).fetch();
   },
 
   fetchLastForAppId: function(appId) {
-    return Documents.find({appId: appId}, {sort: {updated_at: -1}, limit: 1}).fetch()[0];
+    return Documents.find({app_id: appId}, {sort: {updated_at: -1}, limit: 1}).fetch()[0];
   },
 
   update: function(_id, propertiesToUpdate) {

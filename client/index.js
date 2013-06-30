@@ -61,6 +61,8 @@ Meteor.call('fetchAppsForUser', function(error, apps) {
     if(typeof Session.get("activeApp") == "undefined") {
       Session.set("activeApp", App.fetchNameForId(apps[0]));
       Session.set("activeAppId", apps[0]);
+
+      var sidebar = Template.sidebar.initSidebar({});
     }
   }
 });
