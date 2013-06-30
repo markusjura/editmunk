@@ -15,11 +15,8 @@
       <div class="nav-collapse">
         <ul class="nav">
           <li class="active"><li>{{loginButtons}}</li></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sample Project <b class="caret"></b></a>
-            <ul class="dropdown-menu" id="apps-list">
-              <li><a href="#" class="add-app">Add new</a></li>
-            </ul>
+          <li class="dropdown" id="appsListWrapper">
+            {{>appList}}
           </li>
         </ul>
       </div><!-- /.nav-collapse -->
@@ -52,14 +49,12 @@
             <a href="index">
               Sample File 1
               <i class="icon-trash pull-right"></i>
-              <i class="icon-edit pull-right" style="margin-right: 5px;"></i>
             </a>
         </li>
         <li>
             <a href="index">
               Sample File 2
               <i class="icon-trash pull-right"></i>
-              <i class="icon-edit pull-right" style="margin-right: 5px;"></i>
             </a>
         </li>
       </ul>
@@ -71,4 +66,19 @@
       <h4>Login to access the files...</h4>
     </div>
   {{/if}}
+</template>
+
+<template name="appList">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="activeApp"></span> <b class="caret"></b></a>
+  <ul class="dropdown-menu" id="apps-list">
+    <li><a href="#" class="add-app">Add new</a></li>
+    <li class="divider"></li>
+      {{#each apps}}
+       <li>{{>app}}</li>
+      {{/each}}
+  </ul>
+</template>
+
+<template name="app">
+  <a href="#" id="{{this}}" class="{{isActive}} appName">{{getName}}</a>
 </template>

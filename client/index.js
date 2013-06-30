@@ -25,8 +25,8 @@ function render_editor() {
 
     handle = query.observe({
       changed : function(newDoc, oldDoc) {
-        if(editor !== undefined && (
-            newDoc.content !== editor.getValue())){
+        console.log("newDoc : ",newDoc.content);
+        if(editor !== undefined){
           editor.setValue(newDoc.content);
         }
       }
@@ -34,8 +34,7 @@ function render_editor() {
 
     handle = editor.on('change', function(e) {
       // update the Documents collection
-      if(editor.getValue() != '') {
-        console.log( 'id of the current doc', Session.get("document"));
+      if(editor.getValue() !== '') {
         Document.update(Session.get("document"), {
           content : editor.getValue(),
           updated_at : new Date().getTime()
@@ -45,30 +44,38 @@ function render_editor() {
   }
 }
 
+// fetching the inital app list
+Meteor.call('fetchAppsForUser', function(error, apps) {
+  if(error) {
+    console.log(error);
+    return;
+  }
+
+  if(apps && apps.length > 0) {
+    Session.set("appsList", apps);
+    console.log("Got them : ",apps);
+    //Template.appList.apps = apps;
+    var rendered = Meteor.render(function() {
+      return Template.appList({ apps: apps });
+    });
+    document.getElementById("appsListWrapper").appendChild(rendered);
+
+    if(typeof Session.get("activeApp") == "undefined") {
+      Session.set("activeApp", App.fetchNameForId(apps[0]));
+      Session.set("activeAppId", apps[0]);
+    }
+
+  }
+});
+
 Meteor.startup(function () {
-  $(document).ready(function (){
-    $('.add-app,.add-file,.edit-file').click(function() {
-      $('#take-name').modal();
-      $('#take-name').find('#save-button').click(function() {
-        $('#take-name').modal('hide');
-        var name = $("#take-name").find('input').val();
-        var app = App.insert(name);
-        Meteor.call('addAppToUser', app._id);
-        $("#take-name").find('input').val('');
-      });
-    });
-
-    Meteor.call('fetchAppsForUser', function(error, apps) {
-      if(error) console.log(error);
-
-      if(apps && apps.length > 0) {
-        $('#apps-list').prepend("<li class='divider'></div>");
-        for(var app in apps) {
-         $('#apps-list').prepend("<li><a href='#'>"+ App.fetchNameForId(apps[0]) +"</a></li>");
-        }
-      }
-    });
-  });
+  var fragment = Meteor.render(
+    function () {
+      var name = Session.get("activeApp") || "None";
+      return name;
+    }
+  );
+  document.getElementById("activeApp").appendChild(fragment);
 });
 
 Template.main.loggedIn = function () {
@@ -78,3 +85,33 @@ Template.main.loggedIn = function () {
 
   return Meteor.userId();
 };
+
+Template.app.isActive = function() {
+  return (this.toString() == Session.get("activeAppId")) ? "active" : "";
+}
+
+Template.app.getName = function() {
+  return App.fetchNameForId(this.toString());
+}
+
+Template.appList.events({
+  'click .add-app' : function(evt, templ) {
+    evt.stopPropagation();
+    evt.preventDefault();
+
+    $('#take-name').modal();
+    $('#take-name').find('#save-button').click(function() {
+      $('#take-name').modal('hide');
+      var name = $("#take-name").find('input').val();
+      var app = App.insert(name);
+      Meteor.call('addAppToUser', app._id);
+      $("#take-name").find('input').val('');
+    });
+  },
+
+  'click .appName' : function(evt, tmpl) {
+    Session.set("activeApp", $(evt.target).html());
+    Session.set("activeAppId", $(evt.target).attr('id'));
+  }
+
+});
