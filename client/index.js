@@ -1,3 +1,4 @@
+COUNT=0;
 function render_editor() {
   if($('#editor').length > 0) {
     var lastDocument = Document.fetchLastForAppId('default');
@@ -26,7 +27,8 @@ function render_editor() {
     handle = query.observe({
       changed : function(newDoc, oldDoc) {
         console.log("newDoc : ",newDoc.content);
-        if(editor !== undefined){
+        COUNT++;
+        if(editor !== undefined && COUNT <= 2000){
           editor.setValue(newDoc.content);
         }
       }
@@ -41,6 +43,8 @@ function render_editor() {
         });
       }
     });
+
+    Meteor.call('fetchAppsForUser', fetchAppList);
   }
 }
 
@@ -58,7 +62,8 @@ function fetchAppList(error, apps) {
     document.getElementById("apps-list").innerHTML = '';
     document.getElementById("apps-list").appendChild(rendered);
 
-    if(typeof Session.get("activeApp") == "undefined") {
+    if(typeof Session.get("activeApp") == "undefined" ||
+        Session.get("activeApp") === null) {
       Session.set("activeApp", App.fetchNameForId(apps[0]));
       Session.set("activeAppId", apps[0]);
 
@@ -66,6 +71,10 @@ function fetchAppList(error, apps) {
     }
   }
 }
+
+Deps.autorun(function() {
+  $('#activeApp').html(Session.get("activeApp"));
+});
 
 Meteor.call('fetchAppsForUser', fetchAppList);
 
@@ -80,6 +89,14 @@ Meteor.startup(function () {
 });
 
 Template.main.loggedIn = function () {
+  setTimeout(function() {
+      render_editor();
+    }, 100);
+
+  return Meteor.userId();
+};
+
+Template.listDrop.loggedIn = function () {
   setTimeout(function() {
       render_editor();
     }, 100);
@@ -122,3 +139,11 @@ Template.appList.events({
 Template.modal.modName = 'take-name';
 Template.modal.modValue = 'add-input';
 Template.modal.saveTrigger = 'save-button';
+
+Deps.autorun(function(){
+  if(!Meteor.userId()){
+    console.log("User is not logged in !");
+    Session.set('activeApp', null);
+    Session.set('activeAppId', null);
+  }
+});

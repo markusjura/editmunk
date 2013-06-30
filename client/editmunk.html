@@ -15,12 +15,7 @@
       <div class="nav-collapse">
         <ul class="nav">
           <li class="active"><li>{{loginButtons}}</li></li>
-          <li class="dropdown" >
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="activeApp"></span> <b class="caret"></b></a>
-            <ul class="dropdown-menu" id="apps-list">
-              {{>appList}}
-            </ul>
-          </li>
+          {{>listDrop}}
         </ul>
       </div><!-- /.nav-collapse -->
     </div>
@@ -31,7 +26,6 @@
 
   {{>modal}}
 </body>
-
 <template name="modal">
   <div id="{{modName}}" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-body">
@@ -55,6 +49,17 @@
     <div class="container">
       <h4>Login to access the files...</h4>
     </div>
+  {{/if}}
+</template>
+
+<template name="listDrop">
+  {{#if loggedIn}}
+    <li class="dropdown" >
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="activeApp"></span> <b class="caret"></b></a>
+      <ul class="dropdown-menu" id="apps-list">
+        {{>appList}}
+      </ul>
+    </li>
   {{/if}}
 </template>
 
