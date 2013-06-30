@@ -30,7 +30,7 @@ Template.documentList.events({
       appId: Session.get("activeAppId"),
       type: "feature",
       name: "first.feature",
-      content: "Given I am on the Welcome screen"
+      content: "document.write('Hello Editmunk');"
     });
 
     Session.set("activeDocumentId", document._id);

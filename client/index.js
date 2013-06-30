@@ -11,7 +11,7 @@ function render_editor() {
         appId: "default",
         type: "feature",
         name: "first.feature",
-        content: "Given I am on the Welcome screen"
+        content: "document.write('Hello Editmunk');"
       });
     }
 
