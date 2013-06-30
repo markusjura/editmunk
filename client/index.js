@@ -19,14 +19,28 @@ function render_editor() {
     editor.setTheme("ace/theme/xcode");
     editor.getSession().setMode("ace/mode/javascript");
     editor.setValue(lastDocument.content);
-    Session.set("document", lastDocument);
+    Session.set("document", lastDocument._id);
 
-    editor.getSession().on('change', function(e) {
+    var query = Documents.find({_id: lastDocument._id});
+
+    handle = query.observe({
+      changed : function(newDoc, oldDoc) {
+        if(editor !== undefined && (
+            newDoc.content !== editor.getValue())){
+          editor.setValue(newDoc.content);
+        }
+      }
+    });
+
+    handle = editor.on('change', function(e) {
       // update the Documents collection
-      Document.update(Session.get("document")._id, {
-        content : editor.getValue(),
-        updated_at : new Date().getTime()
-      });
+      if(editor.getValue() != '') {
+        console.log( 'id of the current doc', Session.get("document"));
+        Document.update(Session.get("document"), {
+          content : editor.getValue(),
+          updated_at : new Date().getTime()
+        });
+      }
     });
   }
 }
