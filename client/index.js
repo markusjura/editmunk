@@ -52,9 +52,6 @@ Meteor.call('fetchAppsForUser', function(error, apps) {
   }
 
   if(apps && apps.length > 0) {
-    Session.set("appsList", apps);
-    console.log("Got them : ",apps);
-    //Template.appList.apps = apps;
     var rendered = Meteor.render(function() {
       return Template.appList({ apps: apps });
     });
@@ -64,7 +61,6 @@ Meteor.call('fetchAppsForUser', function(error, apps) {
       Session.set("activeApp", App.fetchNameForId(apps[0]));
       Session.set("activeAppId", apps[0]);
     }
-
   }
 });
 
