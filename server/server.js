@@ -12,9 +12,12 @@ Accounts.onCreateUser(function(options, user) {
 
 Meteor.methods({
   addAppToUser: function(appId) {
-    console.log("Added the app!!!");
     Meteor.users.update(
       { _id: this.userId },
-      { $addToSet: { profile: { appIds: appId }}});
+      { $addToSet: { "profile.appIds": appId }});
+  },
+
+  fetchAppsForUser: function() {
+    return Meteor.users.findOne({ _id: this.userId }).profile.appIds;
   }
 });

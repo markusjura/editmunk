@@ -13,6 +13,10 @@ App = {
     });
 
     return Apps.findOne({_id: id});
+  },
+
+  fetchNameForId: function(_id) {
+    return Apps.findOne({ _id: _id }).name;
   }
 }
 
