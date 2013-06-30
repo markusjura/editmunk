@@ -40,6 +40,9 @@ function render_editor() {
 if (Meteor.is_client) {
   Meteor.startup(function () {
     $(document).ready(function (){
+    $('.add-file,.edit-file').click(function() {
+      $('#take-name').modal();
+    });
       render_editor();
     });
   });
